@@ -89,7 +89,7 @@ Write title (max 60 chars) and summary (max 200 chars) in plain, direct language
 function getModel(provider: LlmProvider, model: string | undefined, apiKey: string) {
   switch (provider) {
     case "anthropic":
-      return createAnthropic({ apiKey })(model || "claude-3-5-haiku-latest");
+      return createAnthropic({ apiKey })(model || "claude-haiku-4-5");
     case "google":
       return createGoogleGenerativeAI({ apiKey })(model || "gemini-2.0-flash");
     case "openrouter":

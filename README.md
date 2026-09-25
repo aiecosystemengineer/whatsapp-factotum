@@ -62,7 +62,7 @@ npm run test -- "some text" --llm      # use the real LLM path
 ```
 
 **No API key?** It still works — a built-in keyword heuristic scores messages.
-An LLM (a cheap model like `claude-3-5-haiku-latest` or `gpt-4o-mini` is fine)
+An LLM (a cheap model like `claude-haiku-4-5` or `gpt-4o-mini` is fine)
 is recommended for better judgement.
 
 ## Running 24/7
