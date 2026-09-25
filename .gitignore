@@ -3,4 +3,4 @@ data/
 auth/
 .env
 *.log
-sentinel.config.json
+factotum.config.json

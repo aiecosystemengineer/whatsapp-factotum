@@ -4,10 +4,10 @@ import {
   postProcess,
   type Verdict,
 } from "../src/classifier.js";
-import type { SentinelConfig } from "../src/config.js";
+import type { FactotumConfig } from "../src/config.js";
 import type { IncomingMessage } from "../src/whatsapp.js";
 
-const cfg: SentinelConfig = {
+const cfg: FactotumConfig = {
   watchedGroups: [],
   interests: ["free AI credits and vouchers", "hackathons"],
   ignoreKeywords: [],

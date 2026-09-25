@@ -7,7 +7,7 @@ import { z } from "zod";
 import {
   apiKeyForProvider,
   type LlmProvider,
-  type SentinelConfig,
+  type FactotumConfig,
 } from "./config.js";
 import {
   AGENT_SECURITY_PREAMBLE,
@@ -65,7 +65,7 @@ const verdictSchema = z.object({
 
 const PROMPT = `${AGENT_SECURITY_PREAMBLE}
 
-You are WhatsApp Sentinel, a personal assistant that watches busy WhatsApp group chats for ONE user and decides which messages they must not miss.
+You are WhatsApp Factotum, a personal assistant that watches busy WhatsApp group chats for ONE user and decides which messages they must not miss.
 
 The user's interests (plain language):
 {{interests}}
@@ -123,12 +123,12 @@ function isTrivialMessage(text: string): boolean {
   return false;
 }
 
-function matchesIgnore(text: string, cfg: SentinelConfig): boolean {
+function matchesIgnore(text: string, cfg: FactotumConfig): boolean {
   const lower = text.toLowerCase();
   return cfg.ignoreKeywords.some((k) => k && lower.includes(k.toLowerCase()));
 }
 
-function interestHit(text: string, cfg: SentinelConfig): boolean {
+function interestHit(text: string, cfg: FactotumConfig): boolean {
   const lower = text.toLowerCase();
   const words = new Set<string>();
   for (const interest of cfg.interests) {
@@ -193,7 +193,7 @@ const HEURISTIC_RULES: Array<{
 
 export function classifyHeuristic(
   messages: IncomingMessage[],
-  cfg: SentinelConfig,
+  cfg: FactotumConfig,
 ): Verdict[] {
   const verdicts: Verdict[] = [];
   for (const m of messages) {
@@ -247,7 +247,7 @@ export function classifyHeuristic(
 export function postProcess(
   verdicts: Verdict[],
   messages: IncomingMessage[],
-  cfg: SentinelConfig,
+  cfg: FactotumConfig,
 ): Verdict[] {
   const byId = new Map(messages.map((m) => [m.id, m]));
   return verdicts
@@ -273,7 +273,7 @@ let warnedNoKey = false;
 export async function classifyBatch(
   messages: IncomingMessage[],
   context: IncomingMessage[],
-  cfg: SentinelConfig,
+  cfg: FactotumConfig,
 ): Promise<Verdict[]> {
   if (messages.length === 0) return [];
   if (cfg.llm.provider === "none") return classifyHeuristic(messages, cfg);

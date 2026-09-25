@@ -1,6 +1,6 @@
 import pino from "pino";
 import { classifyBatch, type Verdict } from "./classifier.js";
-import type { SentinelConfig } from "./config.js";
+import type { FactotumConfig } from "./config.js";
 import { notify } from "./notifier.js";
 import {
   appendAlert,
@@ -24,7 +24,7 @@ let ignoredToday = 0;
 let ignoredDay = new Date().toDateString();
 let digestSentFor = "";
 
-async function flushGroup(groupId: string, cfg: SentinelConfig): Promise<void> {
+async function flushGroup(groupId: string, cfg: FactotumConfig): Promise<void> {
   const batch = buffers.get(groupId) || [];
   buffers.set(groupId, []);
   if (batch.length === 0) return;
@@ -65,7 +65,7 @@ export function buildDigestText(): string {
   const startOfDay = new Date();
   startOfDay.setHours(0, 0, 0, 0);
   const alerts = alertsSince(startOfDay.toISOString());
-  const lines: string[] = ["📋 *WhatsApp Sentinel — daily digest*"];
+  const lines: string[] = ["📋 *WhatsApp Factotum — daily digest*"];
   if (alerts.length === 0) {
     lines.push("All quiet today — nothing worth interrupting you for.");
   } else {
@@ -97,11 +97,11 @@ export async function sendDigest(): Promise<void> {
   await sendToSelf(buildDigestText());
 }
 
-export async function startWatcher(cfg: SentinelConfig): Promise<void> {
+export async function startWatcher(cfg: FactotumConfig): Promise<void> {
   const watched = new Set(cfg.watchedGroups.map((g) => g.id));
   if (watched.size === 0) {
     logger.warn(
-      "watchedGroups is empty — nothing to watch. Run `npm run groups` and paste JIDs into sentinel.config.json.",
+      "watchedGroups is empty — nothing to watch. Run `npm run groups` and paste JIDs into factotum.config.json.",
     );
   }
 
@@ -127,7 +127,7 @@ export async function startWatcher(cfg: SentinelConfig): Promise<void> {
     onReady() {
       logger.info(
         { groups: watched.size, minScore: cfg.minScore },
-        "Sentinel watching",
+        "Factotum watching",
       );
     },
   });

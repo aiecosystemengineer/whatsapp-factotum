@@ -1,4 +1,4 @@
-# WhatsApp Sentinel
+# WhatsApp Factotum
 
 An always-on personal assistant that watches **your selected WhatsApp group chats**
 and pings your phone the moment something you'd hate to miss appears — free AI
@@ -33,12 +33,12 @@ untrusted-data block and secrets are redacted before anything is logged or sent.
 ```bash
 npm i
 cp .env.example .env
-cp sentinel.config.example.json sentinel.config.json
+cp factotum.config.example.json factotum.config.json
 npm run link        # scan the QR: WhatsApp › Settings › Linked devices
 npm run groups      # lists JID | name | members for all your groups
 ```
 
-Paste the JIDs you want watched into `sentinel.config.json → watchedGroups`,
+Paste the JIDs you want watched into `factotum.config.json → watchedGroups`,
 set your `interests` in plain language, then:
 
 - **Push notifications (recommended):** install the ntfy app on your phone,
@@ -70,19 +70,19 @@ is recommended for better judgement.
 With [pm2](https://pm2.keymetrics.io):
 
 ```bash
-pm2 start npm --name sentinel -- run watch
+pm2 start npm --name factotum -- run watch
 pm2 save
 ```
 
-Or a systemd user unit (`~/.config/systemd/user/sentinel.service`):
+Or a systemd user unit (`~/.config/systemd/user/factotum.service`):
 
 ```ini
 [Unit]
-Description=WhatsApp Sentinel
+Description=WhatsApp Factotum
 After=network-online.target
 
 [Service]
-WorkingDirectory=%h/repos/whatsapp-sentinel
+WorkingDirectory=%h/repos/whatsapp-factotum
 ExecStart=%h/.nvm/versions/node/v22.0.0/bin/npm run watch
 Restart=always
 RestartSec=10
@@ -91,7 +91,7 @@ RestartSec=10
 WantedBy=default.target
 ```
 
-Then `systemctl --user enable --now sentinel` (fix the node path to your install).
+Then `systemctl --user enable --now factotum` (fix the node path to your install).
 
 ## Safety & ToS
 

@@ -1,5 +1,5 @@
 import pino from "pino";
-import type { SentinelConfig } from "./config.js";
+import type { FactotumConfig } from "./config.js";
 import type { Verdict } from "./classifier.js";
 import { sendToSelf } from "./whatsapp.js";
 import type { IncomingMessage } from "./whatsapp.js";
@@ -31,7 +31,7 @@ function priorityFor(v: Verdict): string {
 async function notifyNtfy(
   verdict: Verdict,
   msg: IncomingMessage,
-  cfg: SentinelConfig,
+  cfg: FactotumConfig,
 ): Promise<void> {
   const topic = cfg.notify.ntfyTopic?.trim();
   if (!topic) return;
@@ -60,7 +60,7 @@ async function notifyNtfy(
 async function notifySelfChat(
   verdict: Verdict,
   msg: IncomingMessage,
-  cfg: SentinelConfig,
+  cfg: FactotumConfig,
 ): Promise<void> {
   if (!cfg.notify.selfChat) return;
   const isScam = verdict.category === "scam";
@@ -79,7 +79,7 @@ async function notifySelfChat(
 export async function notify(
   verdict: Verdict,
   msg: IncomingMessage,
-  cfg: SentinelConfig,
+  cfg: FactotumConfig,
 ): Promise<void> {
   try {
     await notifyNtfy(verdict, msg, cfg);

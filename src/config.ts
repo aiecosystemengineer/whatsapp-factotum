@@ -41,9 +41,9 @@ const configSchema = z.object({
     .default({ enabled: true, hour: 21 }),
 });
 
-export type SentinelConfig = z.infer<typeof configSchema>;
+export type FactotumConfig = z.infer<typeof configSchema>;
 
-export type LlmProvider = SentinelConfig["llm"]["provider"];
+export type LlmProvider = FactotumConfig["llm"]["provider"];
 
 const PROVIDER_ENV: Record<Exclude<LlmProvider, "none">, string> = {
   anthropic: "ANTHROPIC_API_KEY",
@@ -57,18 +57,18 @@ export function apiKeyForProvider(provider: LlmProvider): string {
   return (process.env[PROVIDER_ENV[provider]] || "").trim();
 }
 
-export function defaultConfig(): SentinelConfig {
+export function defaultConfig(): FactotumConfig {
   return configSchema.parse({});
 }
 
-const CONFIG_PATH = path.join(process.cwd(), "sentinel.config.json");
-const EXAMPLE_PATH = path.join(process.cwd(), "sentinel.config.example.json");
+const CONFIG_PATH = path.join(process.cwd(), "factotum.config.json");
+const EXAMPLE_PATH = path.join(process.cwd(), "factotum.config.example.json");
 
-export function loadConfig(): SentinelConfig {
+export function loadConfig(): FactotumConfig {
   if (!fs.existsSync(CONFIG_PATH)) {
     const hint = fs.existsSync(EXAMPLE_PATH)
-      ? `cp sentinel.config.example.json sentinel.config.json`
-      : "create sentinel.config.json (see README)";
+      ? `cp factotum.config.example.json factotum.config.json`
+      : "create factotum.config.json (see README)";
     throw new Error(
       `Missing ${CONFIG_PATH}.\n` +
         `Create it first:\n  ${hint}\n` +
@@ -80,13 +80,13 @@ export function loadConfig(): SentinelConfig {
     raw = JSON.parse(fs.readFileSync(CONFIG_PATH, "utf8"));
   } catch (e) {
     throw new Error(
-      `sentinel.config.json is not valid JSON: ${e instanceof Error ? e.message : e}`,
+      `factotum.config.json is not valid JSON: ${e instanceof Error ? e.message : e}`,
     );
   }
   const parsed = configSchema.safeParse(raw);
   if (!parsed.success) {
     throw new Error(
-      `sentinel.config.json is invalid:\n${parsed.error.issues
+      `factotum.config.json is invalid:\n${parsed.error.issues
         .map((i) => `  - ${i.path.join(".")}: ${i.message}`)
         .join("\n")}`,
     );

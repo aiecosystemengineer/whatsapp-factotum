@@ -3,7 +3,7 @@ import { classifyBatch, classifyHeuristic } from "./classifier.js";
 import {
   defaultConfig,
   loadConfig,
-  type SentinelConfig,
+  type FactotumConfig,
 } from "./config.js";
 import { notify } from "./notifier.js";
 import { connect, listGroups, waitUntilReady } from "./whatsapp.js";
@@ -15,17 +15,17 @@ const logger = pino({
   transport: { target: "pino-pretty", options: { colorize: true } },
 });
 
-const USAGE = `WhatsApp Sentinel — watches your group chats and pings you about what matters.
+const USAGE = `WhatsApp Factotum — watches your group chats and pings you about what matters.
 
 Usage:
   npm run link                    Link WhatsApp (scan QR via Linked devices)
-  npm run groups                  List your group JIDs to paste into sentinel.config.json
+  npm run groups                  List your group JIDs to paste into factotum.config.json
   npm run watch                   Start watching
   npm run test -- "<text>" [--llm] [--send]   Classify a test message
   npm run digest                  Send today's digest now
 `;
 
-function mustConfig(): SentinelConfig {
+function mustConfig(): FactotumConfig {
   try {
     return loadConfig();
   } catch (e) {
@@ -67,7 +67,7 @@ async function main() {
         }
       }
       console.log(
-        "\nPaste the JIDs you want to watch into sentinel.config.json → watchedGroups.",
+        "\nPaste the JIDs you want to watch into factotum.config.json → watchedGroups.",
       );
       process.exit(0);
     }
@@ -87,12 +87,12 @@ async function main() {
         console.error('Usage: npm run test -- "<message text>" [--llm] [--send]');
         process.exit(1);
       }
-      let cfg: SentinelConfig;
+      let cfg: FactotumConfig;
       try {
         cfg = loadConfig();
       } catch {
         logger.warn(
-          "No sentinel.config.json — using defaults for this test run",
+          "No factotum.config.json — using defaults for this test run",
         );
         cfg = defaultConfig();
       }
