@@ -1,0 +1,26 @@
+{
+  "watchedGroups": [
+    { "id": "1203630xxxxxxxxxx@g.us", "name": "AI Builders KL" }
+  ],
+  "interests": [
+    "Free AI credits, vouchers, promo codes and giveaways (e.g. Claude, OpenAI, cloud credits)",
+    "AI/tech meetups, hackathons and workshops",
+    "Deadlines, registrations and RSVPs",
+    "Job, freelance and collaboration opportunities"
+  ],
+  "ignoreKeywords": [],
+  "minScore": 60,
+  "batchWindowSeconds": 20,
+  "notify": {
+    "ntfyTopic": "",
+    "ntfyServer": "https://ntfy.sh",
+    "selfChat": true
+  },
+  "llm": {
+    "provider": "anthropic"
+  },
+  "digest": {
+    "enabled": true,
+    "hour": 21
+  }
+}
