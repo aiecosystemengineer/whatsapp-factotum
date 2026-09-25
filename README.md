@@ -1,4 +1,4 @@
-# WhatsApp Factotum
+# WhatsApp Factotum — My Personal WhatsApp Butler
 
 An always-on personal assistant that watches **your selected WhatsApp group chats**
 and pings your phone the moment something you'd hate to miss appears — free AI
