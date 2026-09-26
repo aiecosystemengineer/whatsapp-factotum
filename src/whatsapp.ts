@@ -30,6 +30,7 @@ let selfJid: string | null = null;
 let ready = false;
 const groupNameCache = new Map<string, string>();
 const readyWaiters: Array<() => void> = [];
+let reconnectAttempts = 0;
 
 function textFromMessage(message: proto.IMessage | undefined | null): string {
   if (!message) return "";
@@ -88,6 +89,7 @@ export async function connect(opts: ConnectOpts = {}): Promise<void> {
     }
     if (connection === "open") {
       ready = true;
+      reconnectAttempts = 0;
       selfJid = sock?.user?.id || null;
       logger.info({ selfJid }, "WhatsApp linked");
       for (const w of readyWaiters.splice(0)) w();
@@ -110,7 +112,14 @@ export async function connect(opts: ConnectOpts = {}): Promise<void> {
           logger.warn({ e }, "failed to clear auth");
         }
       }
-      setTimeout(() => void connect(opts), loggedOut ? 800 : 2000);
+      if (loggedOut) {
+        setTimeout(() => void connect(opts), 800);
+        return;
+      }
+      reconnectAttempts += 1;
+      const delay = Math.min(2_000 * 2 ** (reconnectAttempts - 1), 15 * 60_000);
+      logger.info({ attempt: reconnectAttempts, delayMs: delay }, "reconnecting");
+      setTimeout(() => void connect(opts), delay);
     }
   });
 

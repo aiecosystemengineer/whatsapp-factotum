@@ -22,9 +22,14 @@ const configSchema = z.object({
     .object({
       ntfyTopic: z.string().optional(),
       ntfyServer: z.string().default("https://ntfy.sh"),
-      selfChat: z.boolean().default(true),
+      selfChat: z.boolean().default(false),
+      selfChatMaxPerHour: z.number().int().min(1).max(60).default(6),
     })
-    .default({ ntfyServer: "https://ntfy.sh", selfChat: true }),
+    .default({
+      ntfyServer: "https://ntfy.sh",
+      selfChat: false,
+      selfChatMaxPerHour: 6,
+    }),
   llm: z
     .object({
       provider: z

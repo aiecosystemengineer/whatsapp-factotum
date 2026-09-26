@@ -1,6 +1,7 @@
 import pino from "pino";
 import type { FactotumConfig } from "./config.js";
 import type { Verdict } from "./classifier.js";
+import { rateLimit } from "./security.js";
 import { sendToSelf } from "./whatsapp.js";
 import type { IncomingMessage } from "./whatsapp.js";
 
@@ -63,6 +64,14 @@ async function notifySelfChat(
   cfg: FactotumConfig,
 ): Promise<void> {
   if (!cfg.notify.selfChat) return;
+  const rl = rateLimit("self-chat-hour", cfg.notify.selfChatMaxPerHour, 3_600_000);
+  if (!rl.ok) {
+    logger.warn(
+      { retryAfterMs: rl.retryAfterMs },
+      "self-chat hourly cap reached — alert delivered via ntfy/log only",
+    );
+    return;
+  }
   const isScam = verdict.category === "scam";
   const lines = [
     `${isScam ? "⚠️" : "🔔"} *${verdict.title}*`,

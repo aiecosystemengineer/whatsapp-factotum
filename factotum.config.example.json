@@ -14,7 +14,8 @@
   "notify": {
     "ntfyTopic": "",
     "ntfyServer": "https://ntfy.sh",
-    "selfChat": true
+    "selfChat": false,
+    "selfChatMaxPerHour": 6
   },
   "llm": {
     "provider": "anthropic"
